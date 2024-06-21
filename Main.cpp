@@ -629,41 +629,6 @@ class carSystem{
 
             }
         }
-        void adminPage(){
-            int choice;
-            int flag;
-            string line;
-            while(1){
-                cars.printCars();
-                cout << "Edit page" << endl;
-                cout << "1) Add new car" << endl;
-                cout << "2) Modify car data" << endl;
-                cout << "3) Remove car record" << endl;
-                cout << "4) Number car sold" << endl;
-                cout << "5) Exit" << endl;
-                cout << "> ";
-                cin >> choice;
-                switch (choice)
-                {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    flag = 1;
-                default:
-                    cout << "Invalid Input";
-                    continue; 
-                }
-                if(flag == 1){
-                    return;
-                }
-            }
-        }
         void selectPurchase(){
             string line;
             int flag = 0;
@@ -701,7 +666,39 @@ class carSystem{
             }
         }
         void adminPage(){
-
+            int choice;
+            int flag;
+            string line;
+            while(1){
+                cars.printCars();
+                cout << "Edit page" << endl;
+                cout << "1) Add new car" << endl;
+                cout << "2) Modify car data" << endl;
+                cout << "3) Remove car record" << endl;
+                cout << "4) Number car sold" << endl;
+                cout << "5) Exit" << endl;
+                cout << "> ";
+                cin >> choice;
+                switch (choice)
+                {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    flag = 1;
+                default:
+                    cout << "Invalid Input";
+                    continue; 
+                }
+                if(flag == 1){
+                    return;
+                }
+            }
         }
 };
 int main(){
