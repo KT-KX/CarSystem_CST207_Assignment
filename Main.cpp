@@ -419,6 +419,7 @@ class allSoldCar : public car{
         vector <car> soldVec;
         vector <car> copySoldVec;
         string timer;
+        string period;
 
     public:
         allSoldCar(){
@@ -533,12 +534,18 @@ class allSoldCar : public car{
                 return -1;
         }
 
+        void setPeriod(string p){
+            period = p;
+        }
+
+        string getPeriod()const{
+            return period;
+        }
+
         string getTimer(){
             // Get the timestamp for the current date and time
             time_t timestamp;
             time(&timestamp);
-
-            // Display the date and time represented by the timestamp
             cout << ctime(&timestamp);
             return timer;
         }
@@ -558,11 +565,70 @@ class allSoldCar : public car{
         }
 };
 
+class soldCar : public car{
+    private:
+        vector <allSoldCar> soldVec;
+        vector <allSoldCar> copySoldVec;
+
+    public:
+        soldCar(){
+            saveSoldCar();
+        }
+
+        void saveSoldCar(){
+            string soldCarPath = "soldCar.txt";
+            ifstream soldFile(soldCarPath);
+            if(!soldFile){
+                cout << "Error opening " << soldCarPath << endl;
+            }
+            else{
+                string line;
+                allSoldCar s;
+                while(getline(soldFile, line)){
+                    stringstream ss(line);
+                    string temp;
+                    getline(ss, temp, ',');
+                    s.setID(temp);
+                    getline(ss, temp, ',');
+                    s.setBrand(temp);
+                    getline(ss, temp, ',');
+                    s.setColor(temp);
+                    getline(ss, temp, ',');
+                    s.setCountry(temp);
+                    getline(ss, temp, ',');
+                    s.setYear(temp);
+                    getline(ss, temp, ',');
+                    s.setPrice(temp);
+                    getline(ss, temp, ',');
+                    s.setPeriod(temp);
+                    soldVec.push_back(s);
+                }
+            }
+            copySoldVec = soldVec;
+        }
+
+        void printBills()const{
+            //system("CLS");
+            for(const auto &s : copySoldVec){
+                cout << "-----------------------------------------" << endl;
+                cout << "Car ID: " << s.getID() << endl;
+                cout << "Car Brand: " << s.getBrand() << endl;
+                cout << "Colour of the Car: " << s.getColor() << endl;
+                cout << "Country Manufacture: " <<s.getCountry() << endl;
+                cout << "Year produced: " << s.getYear() << endl;
+                cout << "Price of the car: RM" << s.getPrice() << endl;
+                cout << "Time purchase: " << s.getPeriod() << endl;
+            }
+            cout << "-----------------------------------------" << endl;
+        }
+};
+
 class carSystem{
     private:
         allClient clients;
         Allcar cars;
         allSoldCar vended;
+        soldCar solds;
         allAdmin admins;
         person currentUser;
         vector <car> chosenCar;
@@ -652,7 +718,7 @@ class carSystem{
             return false;
         }
         void clientPage(){
-            system("CLS");
+            //system("CLS");
             int choice;
             int flag;
             string line;
@@ -663,7 +729,8 @@ class carSystem{
                 cout << "2) Price" << endl;
                 cout << "3) Brand" << endl;
                 cout << "4) Select Purchase" << endl;
-                cout << "5) Checkout" << endl;
+                cout << "5) Check Bill" << endl;
+                cout << "6) Checkout" << endl;
                 cout << "> ";
                 cin >> choice;
                 switch (choice){
@@ -675,9 +742,13 @@ class carSystem{
                     break;
                 case 4:
                     selectPurchase();
+                    confirmPurchase();
                     break;
                 case 5:
-                    flag = 1;
+                    //checkBill();
+                    break;
+                case 6:
+                    flag = 1;                    
                 default:
                     cout << "Invalid Input";
                     continue; 
@@ -708,6 +779,7 @@ class carSystem{
         void confirmPurchase(){
             system("CLS");
             string flag;
+            string period;
             cout << "       Your Purchase" << endl;
             cout << "----------------------------" << endl;
             for(int i = 0; i < chosenCar.size(); i++){
@@ -723,8 +795,12 @@ class carSystem{
             cout << "> ";
             cin >> flag;
             if(flag ==  "Y"){
-
+                //period = vended.getTimer();
             }
+        }
+        void checkBill(){
+            // solds.printBills();
+            // cout << "bello";
         }
         void adminPage(){
             system("CLS");
@@ -881,8 +957,8 @@ class carSystem{
         }
 };
 int main(){
-    allSoldCar sc;
-    sc.getTimer();
+    soldCar cr;
+    cr.printBills();
     carSystem sys;
     sys.run();
 }
