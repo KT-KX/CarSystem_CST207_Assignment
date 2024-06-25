@@ -6,13 +6,10 @@
 #include <sstream>
 #include <map>
 #include <ctime>
+#include <windows.h>
+#define sleep(x) Sleep(1000 * (x))
 
 using namespace std;
-
-class sortingNsearch{
-    public:
-        
-};
 
 class person{
     private:
@@ -102,58 +99,7 @@ class allClient : public person{
                 }
             }
         }
-
-
-        int partition(int arr[], int start, int end){
-            int pivot = arr[start];
-    
-            int count = 0;
-            for(int i = start + 1; i <= end; i++){
-                if (arr[i] <= pivot)
-                    count++;
-            }
-        
-            // Giving pivot element its correct position
-            int pivotIndex = start + count;
-            swap(arr[pivotIndex], arr[start]);
-        
-            // Sorting left and right parts of the pivot element
-            int i = start, j = end;
-        
-            while(i < pivotIndex && j > pivotIndex){
-                while(arr[i] <= pivot){
-                    i++;
-                }
-        
-                while(arr[j] > pivot){
-                    j--;
-                }
-        
-                if(i < pivotIndex && j > pivotIndex){
-                    swap(arr[i++], arr[j--]);
-                }
-            }
-        
-            return pivotIndex;
-        }
  
-        void quickSort(int arr[], int start, int end)
-        {
-        
-            // base case
-            if(start >= end){
-                return;
-            }
-        
-            // partitioning the array
-            int p = partition(arr, start, end);
-        
-            // Sorting the left part
-            quickSort(arr, start, p - 1);
-        
-            // Sorting the right part
-            quickSort(arr, p + 1, end);
-        }
         int binarySearch(int low, int high, string x){
             while(low <= high) {
                 int mid = low + (high - low) / 2;
@@ -176,14 +122,6 @@ class allClient : public person{
 
             // If we reach here, then element was not present
             cout << 1 << endl;
-            return -1;
-        }
-        int LinearSearch(int arr[], int n, int x){
-            for(int i = 0; i < n; i++){
-                if (arr[i] == x){
-                    return i;
-                }
-            }
             return -1;
         }
 };
@@ -355,49 +293,128 @@ class Allcar{
             return copy_cars;
         }
 
-        void selectionSort(){
-            copy_cars = cars;
-            int min_idx;
-            for(int i = 0; i < copy_cars.size(); i++){
-                // Find the minimum element in
-                // unsorted array
-                min_idx = i;
-                for(int j = i + 1; j < copy_cars.size(); j++){
-                    if(copy_cars[j].getID() < copy_cars[min_idx].getID()){
-                        min_idx = j;
-                    }
+        int partitionID(int start, int end){
+            car pivot = copy_cars[start];
+            int count = 0;
+            for(int i = start + 1; i <= end; i++){
+                if(copy_cars[i].getID() <= pivot.getID())
+                    count++;
+            }
+            // Giving pivot element its correct position
+            int pivotIndex = start + count;
+            swap(copy_cars[pivotIndex], copy_cars[start]);
+        
+            // Sorting left and right parts of the pivot element
+            int i = start, j = end;
+        
+            while(i < pivotIndex && j > pivotIndex){
+                while (copy_cars[i].getID() <= pivot.getID()){
+                    i++;
                 }
-                // Swap the found minimum element
-                // with the first element
-                if(min_idx != i){
-                    swap(copy_cars[min_idx], copy_cars[i]);
+                while(copy_cars[j].getID() > pivot.getID()){
+                    j--;
+                }
+                if(i < pivotIndex && j > pivotIndex){
+                    swap(copy_cars[i++], copy_cars[j--]);
                 }
             }
+            return pivotIndex;
         }
 
-        int binarySearch(int low, int high, string x){
-            copy_cars = cars;
+        void quickSortID(int start, int end){
+            // base case
+            if (start >= end)
+                return;
+            // partitioning the array
+            int p = partitionID(start, end);
+            // Sorting the left part
+            quickSortID(start, p - 1);
+            // Sorting the right part
+            quickSortID(p + 1, end);
+        }
 
-            while(low <= high){
-                int mid = low + (high - low) / 2;
-
-                // Check if x is present at mid
-                if(copy_cars[mid].getBrand() == x){
-                    return mid;
+        int partitionBrand(int start, int end){
+            car pivot = copy_cars[start];
+            int count = 0;
+            for(int i = start + 1; i <= end; i++){
+                if(copy_cars[i].getBrand() <= pivot.getBrand())
+                    count++;
+            }
+            // Giving pivot element its correct position
+            int pivotIndex = start + count;
+            swap(copy_cars[pivotIndex], copy_cars[start]);
+            // Sorting left and right parts of the pivot element
+            int i = start, j = end;
+            while(i < pivotIndex && j > pivotIndex){
+                while(copy_cars[i].getBrand() <= pivot.getBrand()){
+                    i++;
                 }
-
-                // If x greater, ignore left half
-                if(copy_cars[mid].getBrand() < x){
-                    low = mid + 1;
+                while(copy_cars[j].getBrand() > pivot.getBrand()){
+                    j--;
                 }
-
-                // If x is smaller, ignore right half
-                else{
-                    high = mid - 1;
+                if(i < pivotIndex && j > pivotIndex){
+                    swap(copy_cars[i++], copy_cars[j--]);
                 }
             }
-                // If we reach here, then element was not present
-                return -1;
+            return pivotIndex;
+        }
+
+        void quickSortBrand(int start, int end){        
+            // base case
+            if(start >= end)
+                return;
+            // partitioning the array
+            int p = partitionBrand(start, end);
+            // Sorting the left part
+            quickSortBrand(start, p - 1);
+            // Sorting the right part
+            quickSortBrand(p + 1, end);
+        }
+
+        int partitionPrice(int start, int end){
+            car pivot = copy_cars[start];
+            int count = 0;
+            for(int i = start + 1; i <= end; i++){
+                if(copy_cars[i].getPrice() <= pivot.getPrice())
+                    count++;
+            }
+            // Giving pivot element its correct position
+            int pivotIndex = start + count;
+            swap(copy_cars[pivotIndex], copy_cars[start]);
+            // Sorting left and right parts of the pivot element
+            int i = start, j = end;
+            while(i < pivotIndex && j > pivotIndex){
+                while(copy_cars[i].getPrice() <= pivot.getPrice()){
+                    i++;
+                }
+                while(copy_cars[j].getPrice() > pivot.getPrice()){
+                    j--;
+                }
+                if(i < pivotIndex && j > pivotIndex){
+                    swap(copy_cars[i++], copy_cars[j--]);
+                }
+            }
+            return pivotIndex;
+        }
+        void quickSortPrice(int start, int end){        
+            // base case
+            if(start >= end)
+                return;
+            // partitioning the array
+            int p = partitionPrice(start, end);
+            // Sorting the left part
+            quickSortPrice(start, p - 1);
+            // Sorting the right part
+            quickSortPrice(p + 1, end);
+        }
+
+        int LinearSearch(string ID){
+            for(int i = 0; i < cars.size(); i++){
+                if(cars[i].getID() == ID){
+                    return i;
+                }
+            }
+            return -1;
         }
 
         void printCars()const{
@@ -416,13 +433,45 @@ class Allcar{
 };
 class allSoldCar : public car{
     private:
-        vector <car> soldVec;
-        vector <car> copySoldVec;
         string timer;
         string period;
+        string userID;
 
     public:
-        allSoldCar(){
+        allSoldCar() = default;
+
+        void setPeriod(string p){
+            period = p;
+        }
+
+        string getPeriod()const{
+            return period;
+        }
+
+        void setUserID(string id){
+            userID = id;
+        }
+
+        string getUserID()const{
+            return userID;
+        }
+
+        string getTimer(){
+            // Get the timestamp for the current date and time
+            time_t timestamp;
+            time(&timestamp);
+            cout << ctime(&timestamp);
+            return timer;
+        }
+};
+
+class soldCar : public car{
+    private:
+        vector <allSoldCar> soldVec;
+        vector <allSoldCar> copySoldVec;
+
+    public:
+        soldCar(){
             saveSoldCar();
         }
 
@@ -434,7 +483,7 @@ class allSoldCar : public car{
             }
             else{
                 string line;
-                car s;
+                allSoldCar s;
                 while(getline(soldFile, line)){
                     stringstream ss(line);
                     string temp;
@@ -450,14 +499,14 @@ class allSoldCar : public car{
                     s.setYear(temp);
                     getline(ss, temp, ',');
                     s.setPrice(temp);
+                    getline(ss, temp, ',');
+                    s.setPeriod(temp);
+                    getline(ss, temp, ',');
+                    s.setUserID(temp);
                     soldVec.push_back(s);
                 }
             }
             copySoldVec = soldVec;
-        }
-
-        vector <car> &getCar(){
-            return copySoldVec;
         }
 
         void bubbleSort(){
@@ -479,16 +528,15 @@ class allSoldCar : public car{
         }
 
         void countBrands(){
-            //system("CLS");
+            system("CLS");
             bubbleSort();
             bool swaps;
-            int totalCount;
+            int totalCount = 0;
             map<string, int> brandCount;
 
             for(const auto& car : copySoldVec){
                 brandCount[car.getBrand()]++;
             }
-
             // Transfer the map to a vector of pairs
             vector<pair<string, int>> brandCountVec(brandCount.begin(), brandCount.end());
 
@@ -534,83 +582,11 @@ class allSoldCar : public car{
                 return -1;
         }
 
-        void setPeriod(string p){
-            period = p;
-        }
-
-        string getPeriod()const{
-            return period;
-        }
-
-        string getTimer(){
-            // Get the timestamp for the current date and time
-            time_t timestamp;
-            time(&timestamp);
-            cout << ctime(&timestamp);
-            return timer;
-        }
-
-        void printCars()const{
-            system("CLS");
-            for(const auto &c : copySoldVec){
-                cout << "-----------------------------------------" << endl;
-                cout << "Car ID: " << c.getID() << endl;
-                cout << "Car Brand: " << c.getBrand() << endl;
-                cout << "Colour of the Car: " << c.getColor() << endl;
-                cout << "Country Manufacture: " <<c.getCountry() << endl;
-                cout << "Year produced: " << c.getYear() << endl;
-                cout << "Price of the car: RM" << c.getPrice() << endl;
-            }
-            cout << "-----------------------------------------" << endl;
-        }
-};
-
-class soldCar : public car{
-    private:
-        vector <allSoldCar> soldVec;
-        vector <allSoldCar> copySoldVec;
-
-    public:
-        soldCar(){
-            saveSoldCar();
-        }
-
-        void saveSoldCar(){
-            string soldCarPath = "soldCar.txt";
-            ifstream soldFile(soldCarPath);
-            if(!soldFile){
-                cout << "Error opening " << soldCarPath << endl;
-            }
-            else{
-                string line;
-                allSoldCar s;
-                while(getline(soldFile, line)){
-                    stringstream ss(line);
-                    string temp;
-                    getline(ss, temp, ',');
-                    s.setID(temp);
-                    getline(ss, temp, ',');
-                    s.setBrand(temp);
-                    getline(ss, temp, ',');
-                    s.setColor(temp);
-                    getline(ss, temp, ',');
-                    s.setCountry(temp);
-                    getline(ss, temp, ',');
-                    s.setYear(temp);
-                    getline(ss, temp, ',');
-                    s.setPrice(temp);
-                    getline(ss, temp, ',');
-                    s.setPeriod(temp);
-                    soldVec.push_back(s);
-                }
-            }
-            copySoldVec = soldVec;
-        }
-
         void printBills()const{
-            //system("CLS");
+            system("CLS");
             for(const auto &s : copySoldVec){
                 cout << "-----------------------------------------" << endl;
+                cout << "User ID: " << s.getUserID() << endl;
                 cout << "Car ID: " << s.getID() << endl;
                 cout << "Car Brand: " << s.getBrand() << endl;
                 cout << "Colour of the Car: " << s.getColor() << endl;
@@ -621,6 +597,42 @@ class soldCar : public car{
             }
             cout << "-----------------------------------------" << endl;
         }
+        void printBills(string year){
+            system("CLS");
+            for(auto &s : copySoldVec){
+                string tempYear = s.getPeriod().substr(20,4);
+                //cout << tempYear << endl;
+                if(tempYear == year){
+                    cout << "-----------------------------------------" << endl;
+                    cout << "User ID: " << s.getUserID() << endl;
+                    cout << "Car ID: " << s.getID() << endl;
+                    cout << "Car Brand: " << s.getBrand() << endl;
+                    cout << "Colour of the Car: " << s.getColor() << endl;
+                    cout << "Country Manufacture: " <<s.getCountry() << endl;
+                    cout << "Year produced: " << s.getYear() << endl;
+                    cout << "Price of the car: RM" << s.getPrice() << endl;
+                    cout << "Time purchase: " << s.getPeriod() << endl;
+                }
+            }
+            cout << "-----------------------------------------" << endl;
+        }
+        void printBillsID(string ID){
+            system("CLS");
+            for(auto &s : copySoldVec){
+                if(s.getUserID() == ID){
+                    cout << "-----------------------------------------" << endl;
+                    cout << "User ID: " << s.getUserID() << endl;
+                    cout << "Car ID: " << s.getID() << endl;
+                    cout << "Car Brand: " << s.getBrand() << endl;
+                    cout << "Colour of the Car: " << s.getColor() << endl;
+                    cout << "Country Manufacture: " <<s.getCountry() << endl;
+                    cout << "Year produced: " << s.getYear() << endl;
+                    cout << "Price of the car: RM" << s.getPrice() << endl;
+                    cout << "Time purchase: " << s.getPeriod() << endl;
+                }
+            }
+            cout << "-----------------------------------------" << endl;
+        }
 };
 
 class carSystem{
@@ -628,7 +640,7 @@ class carSystem{
         allClient clients;
         Allcar cars;
         allSoldCar vended;
-        soldCar solds;
+        soldCar solds;       
         allAdmin admins;
         person currentUser;
         vector <car> chosenCar;
@@ -666,8 +678,8 @@ class carSystem{
                             continue;
                     }
                 }
+                cout << "Mr/Ms" << currentUser.getName() << endl;
                 cout << "Welcome to SHARK BEE" << endl;
-                cout << currentUser.getName() << endl;
                 if(flag == 1){
                     cout << "Please visit us again";
                     break;
@@ -718,89 +730,162 @@ class carSystem{
             return false;
         }
         void clientPage(){
-            //system("CLS");
+            system("CLS");
             int choice;
-            int flag;
+            int flag = 0;
             string line;
             while(1){
-                cars.printCars();
-                cout << "Sort by" << endl;
-                cout << "1) ID" << endl;
-                cout << "2) Price" << endl;
-                cout << "3) Brand" << endl;
-                cout << "4) Select Purchase" << endl;
-                cout << "5) Check Bill" << endl;
-                cout << "6) Checkout" << endl;
+                cout << "1) View history purchase" << endl;
+                cout << "2) Make Purchase" << endl;
+                cout << "-1) log Out" << endl;
                 cout << "> ";
                 cin >> choice;
-                switch (choice){
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    selectPurchase();
-                    confirmPurchase();
-                    break;
-                case 5:
-                    //checkBill();
-                    break;
-                case 6:
-                    flag = 1;                    
-                default:
-                    cout << "Invalid Input";
-                    continue; 
+                if(choice == 1){
+                    cout << "Purchase History" << endl;
+                    solds.printBillsID(currentUser.getID());
                 }
-                if(flag == 1){
-                    
+                else if(choice == 2){
+                    while(1){
+                        cars.printCars();
+                        cout << "Sort by" << endl;
+                        cout << "1) ID" << endl;
+                        cout << "2) Price" << endl;
+                        cout << "3) Brand" << endl;
+                        cout << "4) Select Purchase" << endl;
+                        cout << "5) Checkout" << endl;
+                        cout << "6) Back" << endl;
+                        cout << "> ";
+                        cin >> choice;
+                        switch (choice){
+                        case 1:
+                            cars.quickSortID(0, cars.getCar().size()-1);
+                            break;
+                        case 2:
+                            cars.quickSortPrice(0,cars.getCar().size()-1);
+                            break;
+                        case 3:
+                            cars.quickSortBrand(0, cars.getCar().size()-1);
+                            break;
+                        case 4:
+                            selectPurchase();
+                            break;
+                        case 5:
+                            confirmPurchase();
+                            flag = 1;
+                            break;
+                        case 6:
+                            flag = 1;
+                            break;
+                        default:
+                            cout << "Invalid Input";
+                            continue; 
+                        }
+                        if(flag == 1){
+                            break;
+                        }
+                    }
                 }
-
+                if(choice == -1){
+                    cout << "Thank You for choosing us" << endl;
+                    break;
+                }
             }
         }
         void selectPurchase(){
-            system("CLS");
             string line;
             int flag = 0;
+            int index = 0;
             while(flag == 0){
                 cout << "Enter Car ID> ";
                 cin >> line;
-                for(int i = 0; i < cars.getCar().size(); i++){
-                    if(line == cars.getCar()[i].getID()){
-                        chosenCar.push_back(cars.getCar()[i]);
-                        flag = 1;
-                    }
+                index = cars.LinearSearch(line);
+                flag = 1;
+                if(index == -1){
+                    cout << "Incorrect Car ID" << endl;
                 }
-                if(!flag)
-                cout << "Incorrect Car ID" << endl;
+                if(flag == 1){break;}
             }
         }
         void confirmPurchase(){
             system("CLS");
             string flag;
-            string period;
-            cout << "       Your Purchase" << endl;
-            cout << "----------------------------" << endl;
-            for(int i = 0; i < chosenCar.size(); i++){
-                cout << "ID: " << chosenCar[i].getID() << endl;
-                cout << "Brand: " << chosenCar[i].getBrand() << endl;
-                cout << "Country of manufacture: " << chosenCar[i].getCountry() << endl;
-                cout << "Year of Manufacture: " << chosenCar[i].getYear() << endl;
-                cout << "Color: " << chosenCar[i].getColor() << endl;
-                cout << "Price: " << chosenCar[i].getPrice() << endl;
-                cout << "---------------------------------------------" << endl;
-            }
-            cout << "Confirm Purchase [Y/N]" << endl;
-            cout << "> ";
-            cin >> flag;
-            if(flag ==  "Y"){
-                //period = vended.getTimer();
+            while(1){
+                cout << "       Your Purchase" << endl;
+                cout << "----------------------------" << endl;
+                for(int i = 0; i < chosenCar.size(); i++){
+                    cout << "ID: " << chosenCar[i].getID() << endl;
+                    cout << "Brand: " << chosenCar[i].getBrand() << endl;
+                    cout << "Country of manufacture: " << chosenCar[i].getCountry() << endl;
+                    cout << "Year of Manufacture: " << chosenCar[i].getYear() << endl;
+                    cout << "Color: " << chosenCar[i].getColor() << endl;
+                    cout << "Price: " << chosenCar[i].getPrice() << endl;
+                    cout << "---------------------------------------------" << endl;
+                }
+                cout << "Confirm Purchase [Y/N]" << endl;
+                cout << "> ";
+                cin >> flag;
+                if(flag ==  "Y" || flag == "y"){
+                    payment();
+                    break;
+                }
+                else if(flag ==  "N" || flag == "n"){
+                    chosenCar.clear();
+                    cout << "Cart is clear, please choose again" << endl;
+                    break;
+                }
+                else{
+                    continue;
+                }
             }
         }
-        void checkBill(){
-            // solds.printBills();
-            // cout << "bello";
+        void payment(){
+            system("CLS");
+            double total = 0;
+            double discount = 0;
+            if(!chosenCar.empty()){
+                cout << "        Invoice" << endl;
+                cout << "Date: " << vended.getTimer() << endl;
+                cout << "--------------------------" << endl;
+                for(int i = 0; i < chosenCar.size(); i++){
+                    cout << "ID: " << chosenCar[i].getID() << endl;
+                    cout << "Brand: " << chosenCar[i].getBrand() << endl;
+                    cout << "Country: " << chosenCar[i].getCountry() << endl;
+                    cout << "Year: " << chosenCar[i].getYear() << endl;
+                    cout << "Colour: " << chosenCar[i].getBrand() << endl;
+                    cout << "Price: " << chosenCar[i].getPrice() << endl;
+                    total += chosenCar[i].getPrice();
+                    cout << "-------------------------------" << endl;
+                }
+                cout << "Total Price: RM" <<  total << endl;
+                discount =  checkDiscount();
+                cout << "Discount: " << discount << "%" << endl;
+                cout << "Total Price After Discount: " << total - total*discount << endl;
+                cout << "Only Online Banking is Available" << endl;
+                cout << "MayBank" << endl;
+                cout << "Account Number: 123456789876" << endl;
+            }
+            else{
+                cout << "No Payment Available, please choose a car to make payment" << endl;
+            }
+        }
+        double checkDiscount(){
+            string line;
+            cout << "Enter Discount Code(-1 if you dont have it)> ";
+            cin >> line;
+            if(line == "-1"){
+                cout << "Voucher applied";
+                return 0;
+            }
+            else if(line == "BUBBLE10"){
+                return 0.10;
+            }
+            else if(line == "QUICK20"){
+                return 0.20;
+            }
+            else{
+                cout << "INCORRECT VOUCHER, NO MORE DISCOUNT FOR YOU!" << endl;
+                return 0;
+            }
         }
         void adminPage(){
             system("CLS");
@@ -812,7 +897,8 @@ class carSystem{
                 cout << "2) Modify car data" << endl;
                 cout << "3) Remove car record" << endl;
                 cout << "4) Number car sold" << endl;
-                cout << "5) Exit" << endl;
+                cout << "5) Check Bill" << endl;
+                cout << "6) Logout" << endl;
                 cout << "> ";
                 cin >> choice;
                 switch (choice){
@@ -829,6 +915,9 @@ class carSystem{
                     soldCar();
                     break;
                 case 5:
+                    checkBill();
+                    break;
+                case 6:
                     return;
                 default:
                     cout << "Invalid Input";
@@ -860,19 +949,28 @@ class carSystem{
                 cin >> price;
                 car carcar(brand, color, country, year, price);
                 cout << "Generated car ID" << endl;
-                writeCar << endl << carcar.getID() << "," << carcar.getBrand() << "," << carcar.getColor() << "," << carcar.getCountry() << "," << carcar.getYear() << "," << carcar.getPrice() << endl;
+                writeCar << endl << carcar.getID() << "," << carcar.getBrand() << "," << carcar.getColor() << "," << carcar.getCountry() << "," << carcar.getYear() << "," << carcar.getPrice();
             }
-            cars.printCars();
             writeCar.close();
+            cars.saveCar();
+            // cars.printCars();
         }
 
         void editCar(){
             system("CLS");
             string carPath = "car.txt";
             string id, color;
-            int sb, price, flag;
-            bool carFound;
+            int sb, price;
+            bool carFound = false;
+
             ifstream file(carPath);
+            vector<string> fileLines;
+            string line;
+            while(getline(file, line)){
+                fileLines.push_back(line);
+            }
+            file.close();
+
             cars.printCars();
             while(1){
                 cout << "Enter the car ID you want to edit: ";
@@ -897,21 +995,41 @@ class carSystem{
                             cin >> price;
                             cars.getCar()[i].setPrice(price);
                         }
+                        
+                        // Update the specific line in the fileLines vector
+                        for(int j = 0; j < fileLines.size(); j++){
+                            vector<string> carData;
+                            stringstream ss(fileLines[j]);
+                            string token;
+                            while(getline(ss, token, ',')){
+                                carData.push_back(token);
+                            }
+                            if(carData.size() > 0 && carData[0] == id){
+                                fileLines[j] = cars.getCar()[i].getID() + "," +
+                                            cars.getCar()[i].getBrand() + "," +
+                                            cars.getCar()[i].getColor() + "," +
+                                            cars.getCar()[i].getCountry() + "," +
+                                            cars.getCar()[i].getYear() + "," +
+                                            to_string(cars.getCar()[i].getPrice());
+                                break;
+                            }
+                        }
+                        break;
                     }
                 }
-                cout << "Updated datasets" << endl;
-                cars.printCars();          
-                ofstream out(carPath);
-                for(const auto& car : cars.getCar()){
-                    out << car.getID() << "," << car.getBrand() << "," << car.getColor() << "," << car.getCountry() << "," << car.getYear() << "," << car.getPrice() << endl;
-                }
-                out.close();
-                flag = 0;
-                if(flag == 0){
+
+                if(carFound){
+                    cout << "Updated datasets" << endl;
+                    cars.saveCar();
+                    cars.printCars();
+                    ofstream out(carPath);
+                    for(const auto& fileLine : fileLines){
+                        out << fileLine << endl;
+                    }
+                    out.close();
                     break;
-                }
-                else{
-                    continue;
+                }else{
+                    cout << "Car ID not found. Please try again." << endl;
                 }
             }
         }
@@ -939,7 +1057,8 @@ class carSystem{
                 for(const auto& car : cars.getCar()){
                     out << car.getID() << "," << car.getBrand() << "," << car.getColor() << "," << car.getCountry() << "," << car.getYear() << "," << car.getPrice() << endl;
                 }
-                out.close();              
+                out.close();
+                cars.saveCar();
                 if(flag == 0){
                     break;
                 }
@@ -951,14 +1070,23 @@ class carSystem{
 
         void soldCar(){
             system("CLS");
-            vended.bubbleSort();
-            vended.printCars();
-            vended.countBrands();
+            solds.bubbleSort();
+            //solds.printBills();
+            solds.countBrands();
+        }
+
+        void checkBill(){
+            string year;
+            system("CLS");
+            cout << "Enter the year of bill" << endl;
+            cout << "> ";
+            cin >> year;
+            solds.printBills(year);
         }
 };
 int main(){
-    soldCar cr;
-    cr.printBills();
+    // soldCar cr;
+    // cr.printBills();
     carSystem sys;
     sys.run();
 }
