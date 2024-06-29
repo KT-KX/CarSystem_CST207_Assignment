@@ -582,9 +582,9 @@ class soldCar : public car{
                 return -1;
         }
 
-        void printBills()const{
+        void printBills(){
             system("CLS");
-            for(const auto &s : copySoldVec){
+            for(auto &s : copySoldVec){
                 cout << "-----------------------------------------" << endl;
                 cout << "User ID: " << s.getUserID() << endl;
                 cout << "Car ID: " << s.getID() << endl;
@@ -599,9 +599,9 @@ class soldCar : public car{
         }
         void printBills(string year){
             system("CLS");
+            double totalSales = 0.0;
             for(auto &s : copySoldVec){
                 string tempYear = s.getPeriod().substr(20,4);
-                //cout << tempYear << endl;
                 if(tempYear == year){
                     cout << "-----------------------------------------" << endl;
                     cout << "User ID: " << s.getUserID() << endl;
@@ -611,9 +611,12 @@ class soldCar : public car{
                     cout << "Country Manufacture: " <<s.getCountry() << endl;
                     cout << "Year produced: " << s.getYear() << endl;
                     cout << "Price of the car: RM" << s.getPrice() << endl;
+                    totalSales += s.getPrice();
                     cout << "Time purchase: " << s.getPeriod() << endl;
                 }
             }
+            cout << "-----------------------------------------" << endl;
+            cout << "Total Sales for " << year << ": RM" << totalSales << endl;
             cout << "-----------------------------------------" << endl;
         }
         void printBillsID(string ID){
@@ -675,6 +678,7 @@ class carSystem{
                             flag = 1;
                             break;
                         default:
+                            cout << "Invalid Input :(" << endl;
                             continue;
                     }
                 }
@@ -694,6 +698,7 @@ class carSystem{
         }
         bool login(int type){
             string line;
+            int flag;
             int temp;
 
             if(type == 1){
@@ -708,6 +713,12 @@ class carSystem{
                     if(line == currentUser.getPassword()){
                         return 1;
                     }
+                    else{
+                        cout << "Incorrect Password :(" << endl;
+                    }
+                }
+                else{
+                    cout << "User Not Found :(" << endl;
                 }
                 return 0;
             }
@@ -722,6 +733,7 @@ class carSystem{
                         if(line == admins.getAdmin()[i].getPassword()){
                             return true;
                         }
+
                         cout << "Incorrect Password :)" << endl;
                         break;
                     }
@@ -803,7 +815,9 @@ class carSystem{
                 if(index == -1){
                     cout << "Incorrect Car ID" << endl;
                 }
-                if(flag == 1){break;}
+                if(flag == 1){
+                    break;
+                }
             }
         }
         void confirmPurchase(){
@@ -840,6 +854,9 @@ class carSystem{
         }
         void payment(){
             system("CLS");
+            string soldCarPath = "soldCar.txt";
+            ofstream writeCar;
+            writeCar.open(soldCarPath, ios::app);
             double total = 0;
             double discount = 0;
             if(!chosenCar.empty()){
@@ -924,6 +941,7 @@ class carSystem{
                     continue;
                 }
             }
+            system("CLS");
         }
 
         void addCar(){
@@ -1020,13 +1038,13 @@ class carSystem{
 
                 if(carFound){
                     cout << "Updated datasets" << endl;
-                    cars.saveCar();
-                    cars.printCars();
                     ofstream out(carPath);
                     for(const auto& fileLine : fileLines){
                         out << fileLine << endl;
                     }
                     out.close();
+                    cars.saveCar();
+                    // cars.printCars();
                     break;
                 }else{
                     cout << "Car ID not found. Please try again." << endl;
@@ -1038,35 +1056,59 @@ class carSystem{
             system("CLS");
             string carPath = "car.txt";
             string id;
-            int flag;
+            bool carFound = false;
+
             ifstream file(carPath);
+            vector<string> fileLines;
+            string line;
+            while(getline(file, line)){
+                fileLines.push_back(line);
+            }
+            file.close();
             cars.printCars();
-            while(1){
+            while (true){
                 cout << "Enter the car ID to delete: ";
                 cin >> id;
-                cars.getCar();
-                for(int i = 0; i < cars.getCar().size(); i++){
-                    if(cars.getCar()[i].getID() == id){
-                        cars.getCar().erase(cars.getCar().begin()+i);
+                auto& carList = cars.getCar();
+                for(auto it = carList.begin(); it != carList.end(); ++it){
+                    if(it->getID() == id){
+                        carList.erase(it);
+                        carFound = true;
+
+                        // Remove the specific line from the fileLines vector
+                        for(auto fileIt = fileLines.begin(); fileIt != fileLines.end(); ++fileIt){
+                            vector<string> carData;
+                            stringstream ss(*fileIt);
+                            string token;
+                            while(getline(ss, token, ',')){
+                                carData.push_back(token);
+                            }
+                            if(!carData.empty() && carData[0] == id){
+                                fileLines.erase(fileIt);
+                                break;
+                            }
+                        }
+                        break;
                     }
                 }
-                cout << "Updated datasets" << endl;
-                cars.printCars();
-                flag = 0;
-                ofstream out(carPath);
-                for(const auto& car : cars.getCar()){
-                    out << car.getID() << "," << car.getBrand() << "," << car.getColor() << "," << car.getCountry() << "," << car.getYear() << "," << car.getPrice() << endl;
-                }
-                out.close();
-                cars.saveCar();
-                if(flag == 0){
+
+                if(carFound){
+                    cout << "Updated datasets" << endl;
+                    ofstream out(carPath);
+                    for(const auto& fileLine : fileLines){
+                        out << fileLine << endl;
+                    }
+                    out.close();
+                    cars.saveCar();
+                    // cars.printCars();
                     break;
                 }
                 else{
-                    continue;
+                    cout << "Car ID not found. Please try again." << endl;
                 }
             }
         }
+
 
         void soldCar(){
             system("CLS");
@@ -1085,8 +1127,6 @@ class carSystem{
         }
 };
 int main(){
-    // soldCar cr;
-    // cr.printBills();
     carSystem sys;
     sys.run();
 }
