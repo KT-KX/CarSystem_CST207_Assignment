@@ -34,15 +34,15 @@ Discount:
     Code: QUICK20
     Discount: 20%
 
-Main manu
+Main menu
 Once the programme is executed the terminal will allow the user to choose the login mode (admin or client) user may choose any mode and login to their account. usernames and password is provided above.
 
-Client manu:
+Client menu:
 (1)Once login the user is able to choose to view history of purchase from the company(i), buy new car(ii) or to logout(iii). (client main manu)
 
 (i)The system will prompt all the history purchase then return back to the client main manu
 
-(ii)Purchase Manu:
+(ii)Purchase Menu:
 The system will display all the available vehicles to purchase in a unsorted manner (only once) the user is allow to sort the list by (1)carID(alphabetical), (2)price(low to high) or (3)brand(alphabetical).
 
 (4)To make purchase, (5)to checkout and (6)to return back to the client main manu
@@ -77,4 +77,5 @@ The user is required to key in the details one by one:
     BMW : 5
     TOYOTA : 4
 
-(5)The user has to key in a specific year, then the system will display all the vehicle sold on that year
+(5)The user has to key in a specific year, then the system will display all the vehicle sold on that year and the total sales will be display
+
