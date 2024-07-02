@@ -6,6 +6,7 @@ C++ version C++17
 Instruction manual:
 User logins
 Clients:
+
     Username: SWT
     Password: SWT999
 
@@ -13,6 +14,7 @@ Clients:
     Password: TYX999
 
 Admins:
+
     Username: EKT
     Password: EKT99
 
@@ -23,6 +25,7 @@ Admins:
     Password: KMK999
 
 Discount:
+
     Code: BUBBLE10
     Discount: 10%
 
