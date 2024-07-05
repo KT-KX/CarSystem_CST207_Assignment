@@ -3,20 +3,28 @@ You are a software developer at a software development company. One of the large
 
 C++ version C++17
 
-Instruction manual:
-
+Instruction menual:
 User logins
-
 Clients:
-
     Username: SWT
     Password: SWT999
 
     Username: TYX
     Password: TYX999
 
-Admins:
+    Username: NAJ
+    Password: NAJ999
 
+    Username: ZAF
+    Password: ZAF999
+
+    Username: HAN
+    Password: HAN999
+
+    Username: GOH
+    Password: GOH999
+
+Admins:
     Username: EKT
     Password: EKT99
 
@@ -27,7 +35,6 @@ Admins:
     Password: KMK999
 
 Discount:
-
     Code: BUBBLE10
     Discount: 10%
 
@@ -38,14 +45,14 @@ Main menu
 Once the programme is executed the terminal will allow the user to choose the login mode (admin or client) user may choose any mode and login to their account. usernames and password is provided above.
 
 Client menu:
-(1)Once login the user is able to choose to view history of purchase from the company(i), buy new car(ii) or to logout(iii). (client main manu)
+(1)Once login the user is able to choose to view history of purchase from the company(i), buy new car(ii) or to logout(iii). (client main menu)
 
-(i)The system will prompt all the history purchase then return back to the client main manu
+(i)The system will prompt all the history purchase then return back to the client main menu
 
-(ii)Purchase Menu:
+(ii)Purchase menu:
 The system will display all the available vehicles to purchase in a unsorted manner (only once) the user is allow to sort the list by (1)carID(alphabetical), (2)price(low to high) or (3)brand(alphabetical).
 
-(4)To make purchase, (5)to checkout and (6)to return back to the client main manu
+(4)To make purchase, (5)to checkout and (6)to return back to the client main menu
 
 (a)The user the able to keep puchasing until the users checkout.
 (b)After the user checkout, the system is prompt an invoice for confirmation on purchase. 
@@ -54,7 +61,7 @@ if Y the system will procede to asking the user for discount code(discount code 
 
 else N cart will be empty and user is required to select the car again.
 
-(iii)Logout the user and return to the main manu.
+(iii)Logout the user and return to the main menu.
 
 Admin menu:
 The admin has the ability to (1)add new car(s), (2)modify car record(s), (3)remove car record(S), (4)check number of car sold, (5)check bills on specific year (6)logout(works the same as client logout)
@@ -78,4 +85,3 @@ The user is required to key in the details one by one:
     TOYOTA : 4
 
 (5)The user has to key in a specific year, then the system will display all the vehicle sold on that year and the total sales will be display
-
