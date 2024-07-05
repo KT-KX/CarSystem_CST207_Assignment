@@ -1105,12 +1105,11 @@ class carSystem{
                 fileLines.push_back(line);
             }
             file.close();
-            // Display the current car list in our files 
             cars.printCars();
             while(1){
                 cout << "Enter the car ID you want to edit: ";
                 cin >> id;
-                int index;
+                int index = -1;
                 // search for the car with the given ID (linear seach).
                 for(int i = 0; i < cars.getCar().size(); i++){
                     if(cars.getCar()[i].getID() == id){
@@ -1126,7 +1125,6 @@ class carSystem{
                             cout << "After change: ";
                             cin >> color;
                             cars.getCar()[i].setColor(color);
-                            index = i;
                         }
                         // change car price
                         else if(sb == 2){
@@ -1134,40 +1132,44 @@ class carSystem{
                             cout << "After change: ";
                             cin >> price;
                             cars.getCar()[i].setPrice(price);
-                            index = i;
                         }
-                        // Update the specific line in the fileLines vector
-                        for(int j = 0; j < fileLines.size(); j++){
-                            vector<string> carData;
-                            stringstream ss(fileLines[j]);
-                            string token;
-                            while(getline(ss, token, ',')){
-                                carData.push_back(token);
-                            }
-                            // If the current line corresponds to the edited car, update it
-                            if(carData.size() > 0 && carData[0] == id){
-                                fileLines[j] = cars.getCar()[i].getID() + "," +
-                                            cars.getCar()[i].getBrand() + "," +
-                                            cars.getCar()[i].getColor() + "," +
-                                            cars.getCar()[i].getCountry() + "," +
-                                            cars.getCar()[i].getYear() + "," +
-                                            to_string(cars.getCar()[i].getPrice());
-                                break;
-                            }
-                        }
+                        index = i;
                         break;
                     }
                 }
-                // If the car was found and edited, write the updated vector back to the file
-                if(carFound){
-                    cout << "Updated datasets" << endl;
-                    ofstream out(carPath);
-                    for(const auto& fileLine : fileLines){
-                        out << fileLine << endl;
+                // Update the specific line in the fileLines vector
+                if(carFound && index != -1){
+                    for(int j = 0; j < fileLines.size(); j++){
+                        vector<string> carData;
+                        stringstream ss(fileLines[j]);
+                        string token;
+                        while(getline(ss, token, ',')){
+                            carData.push_back(token);
+                        }
+                        // If the current line corresponds to the edited car, update it
+                        if(carData.size() > 0 && carData[0] == id){
+                            fileLines[j] = cars.getCar()[index].getID() + "," +
+                                        cars.getCar()[index].getBrand() + "," +
+                                        cars.getCar()[index].getColor() + "," +
+                                        cars.getCar()[index].getCountry() + "," +
+                                        cars.getCar()[index].getYear() + "," +
+                                        to_string(cars.getCar()[index].getPrice());
+                            break;
+                        }
+                    }
+
+                    // Write updated lines back to the file without adding a newline to the last line
+                    ofstream out(carPath, ofstream::out | ofstream::trunc);
+                    for(size_t i = 0; i < fileLines.size(); ++i){
+                        if(!fileLines[i].empty()){
+                            out << fileLines[i];
+                            if(i < fileLines.size() - 1){
+                                out << endl;
+                            }
+                        }
                     }
                     out.close();
                     cars.saveCar();
-                    // cars.printCars();
                     break;
                 }
                 else{
